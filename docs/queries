@@ -1,0 +1,122 @@
+1.db.vzlogs.find({"display.width":{$gt:"1000"}},{"display.width":1})
+
+2. Distinct + Search
+
+db.vzlogs.aggregate({$group:{_id:"$exception"}},{$match : {_id:/^j/}})
+
+db.vzlogs.aggregate({$group:{_id:"$exception"}})
+
+http://docs.mongodb.org/manual/tutorial/aggregation-examples/
+
+// http://static.springsource.org/spring-data/mongodb/docs/current/reference/html/mongo.core.html
+import static org.springframework.data.mongodb.core.mapreduce.GroupBy.keyFunction;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+GroupByResults<XObject> results = mongoTemplate.group(where("x").gt(0), 
+                                        "group_test_collection", 
+                                        keyFunction("classpath:keyFunction.js").initialDocument("{ count: 0 }").reduceFunction("classpath:groupReduce.js"), XObject.class);
+                                        
+                                        
+//
+db.vzlogs.aggregate( [ { $project : { exception_string: "$exception" , device_count: "$build.device"}} ,
+ {$group:{_id: {exception_string:"$exception_string"} , total_exception_count : {$sum : 1} } } ]  )
+ 
+ /// http://docs.mongodb.org/manual/reference/sql-aggregation-comparison/
+ 
+ db.vzlogs.aggregate( [ { $project : { exception_string: "$exception" , device_count: "$build.device"}} ,
+ {$group:{_id: {exception_string:"$exception_string"} , total_exception_count : {$sum : 1}, 
+          NumDevice :      } } ]  )
+          
+db.vzlogs.distinct('build.device', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length
+
+db.vzlogs.distinct('build.fingerprint', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length
+        
+db.vzlogs.distinct('app_version_code', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length        
+   
+ /// Best Examples :
+ http://www.opendebug.com/article/401992  
+   
+   IMP :: https://github.com/SpringSource/spring-data-mongodb/blob/master/spring-data-mongodb/src/test/java/org/springframework/data/mongodb/core/mapreduce/GroupByTests.java
+   
+/// Reference ::
+http://docs.mongodb.org/manual/tutorial/map-reduce-examples/
+http://learnmongo.com/posts/quick-tip-mongodb-distinct-count/
+http://cookbook.mongodb.org/patterns/unique_items_map_reduce/
+http://docs.mongodb.org/manual/reference/sql-aggregation-comparison/
+http://docs.mongodb.org/manual/reference/aggregation/group/#stage._S_group
+http://docs.mongodb.org/manual/reference/sql-comparison/
+http://docs.mongodb.org/manual/reference/method/db.collection.distinct/#db.collection.distinct
+
+//GroupResult
+http://static.springsource.org/spring-data/mongodb/docs/current/reference/html/mongo.core.html
+http://www.mkyong.com/mongodb/spring-data-mongodb-query-document/
+
+/////
+Use converter for Joda Date types :
+http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/mongo.core.html#mongo.custom-converters
+http://cookbook.mongodb.org/patterns/date_range/
+http://stackoverflow.com/questions/12486814/date-range-query-not-working-mongodb
+/////
+
+Mongo Reference :
+http://static.springsource.org/spring-data/data-document/docs/current/reference/html/
+
+
+
+//////////
+* Total number of users
+* Total number of users who have email addresses
+* Total number of users who have uploaded an avatar
+User.collection.aggregate([
+  {
+    :$group => {
+      :_id => nil,
+      :total => {:$sum => 1},
+      :email => {:$sum => {:$cond => [{:$eq => [{:$ifNull => ["$email", ""]}, ""]}, 0, 1]}}
+    } 
+  }
+])
+
+User.collection.aggregate([
+  {
+    :$project => {
+      :email => {:$ifNull => ["$email", ""]}
+    }
+  },
+  {
+    :$group => {
+      :_id => nil,
+      :total => {:$sum => 1},
+      :email => {:$sum => {:$cond => [{:$eq => ["", "$email"]}, 0, 1]}}
+    } 
+  }
+])
+/////////////////////
+User.collection.aggregate([
+  {
+    :$group => {
+      :_id => nil,
+      :total => {:$sum => 1},
+      :email => {:$sum => {:$cond => [{:$eq => ["$email", nil]}, 0, 1]}}
+    } 
+  }
+])
+////////////////////////
+
+Following is the mongo and spring data sample.
+
+db.schools.find( { zipcode: 63109 },
+{ students: { $elemMatch: { school: 102 } } } )
+
+
+Query q1 = new Query(Criteria.where("zipcode").is("63109"));
+Query q2 = new Query(Criteria.where("students").elemMatch(Criteri a.where("school").is("102")));
+BasicQuery bsq = new BasicQuery(q1.getQueryObject() , q2.getQueryObject());
+template.findOne(bsq, SchoolList.class);
+
+// http://www.tumblr.com/tagged/spring%20data?language=pt_PT
+
+//// Regex Query :
+
+http://www.mkyong.com/mongodb/spring-data-mongodb-query-document/
+

@@ -1,0 +1,96 @@
+Flow :
+store files in a folder -> import into MongoDB -> view in UI 
+
+(1)start mongoDB
+> B:\mongodb\bin>mongod --dbpath c:/temp/
+(2)start mongoViewer
+> B:\mongoViewer>start_mViewer.bat
+Access the Tool
+> http://localhost:8080/index.html
+
+1.:::db.vzlogs.find({"device":"SCH-I405"})
+1.::db.vzlogs.findOne({exception: /^j/}, { "exception": 1 })
+1. db.vzlogs.find({exception: /^j/})
+db.vzlogs.find(
+
+Implemantation Approachs :
+
+(1) Simply use import tool :
+Goal : import json file into mongo db and query using mongo viewer 
+(i) Create a new db 'test' using mViewer
+(ii) Create a new Collection vzlogs 
+(ii)  Open mongo shell :
+B:\mongodb\bin>mongo
+> use test
+B:\mongodb\bin>
+> mongoimport -d test --upsert --upsertFields report_id -c vzlogs --type json --file C:\RnD\project-logviewer\docs\acra-log-14-1367282266347.json
+
+
+
+
+(2) Programmatically extract document from json file 
+>> 
+
+Other Info :
+
+Download MongoViewer : 
+https://github.com/downloads/Imaginea/mViewer/mViewer-v0.9.1.zip
+
+>>>>>>>
+Flow :
+ETL : Extract documents from Json Lines : JsonLineItemReader
+        Transform documents into prpoer structure
+        Load documents in MongoDB
+   
+  MongoDbItemWriter
+  > http://blog.codecentric.de/en/2012/11/spring-batch-mongodb/
+
+Analyze MongoDB data :
+(1) simple query : mongoViewer
+(2) use jasperSoft to create charts out of mongodb data : http://community.jaspersoft.com/wiki/jaspersoft-mongodb-web-analytics-sample
+ 
+(3) http://wiki.pentaho.com/display/BAD/Create+a+Parameterized+Report+with+MongoDB
+
+(4) http://www.qvsource.com/wiki/MongoDB-Connector.ashx#Running_Queries_0
+=======================
+
+Advanced Notes :
+MongoDB Reference :
+http://samarthbhargava.wordpress.com/2012/02/01/real-time-analytics-with-mongodb/
+
+
+Spring-batch : 
+http://stackoverflow.com/questions/8955363/dynamically-choose-a-spring-batch-reader-at-runtime
+
+Spring MVC + JQuery
+http://krams915.blogspot.com/search/label/JSON
+
+jasperSOft :  Related resources :  http://community.jaspersoft.com/wiki/mongo-db-passing-param-chart
+        :http://community.jaspersoft.com/search?query=mongodb&page=1
+
+http://blog.mongohq.com/blog/2013/01/22/first-week-with-mongodb-2-dot-4-development-release
+
+
+
+
+track traces he 
+device not found
+
+grep "Exception" acra.log
+
+1. exception 4.0.5 start dtae 
+2. exception  " ----" 1.0.5 stack trace,model, app start time ,crash time ,android version , app version
+ 3. device  not found from a date 
+
+active state phyton 2.7  
+
+1. Opened a conversation
+2. Using search ,I wanted to search a string " 2 Members"  which belongs more than one time on that conversation.
+3. It showed me 2 results and hisgligthed the latest one that has received/sent out.
+4. Pressed up arrow to view the previous match but its not working 
+So could not test the down arrow feature.
+
+1. Wanted to search a string "Resting" which has multiple entry.
+2. On search screen typed  only  "R" , not the exact word , but it was showing hints" Resting"  and time stamp.
+3. Chosen "Resting" from there. 
+On CL Its highlighting the actual word but showing 1 results for "R" . could not able to figure out that I specefied " Resting" on search screen

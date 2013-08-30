@@ -1,0 +1,43 @@
+First I had imported the log file using mongoimport into a collection vzlogs
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Unique occurrences 
+
+· db.vzlogs.aggregate({$group:{_id:"$exception"}})
+
+· db.vzlogs.aggregate({$group:{_id:"$build.device"}})
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>.
+
+Total Exception Count per unique exception_message:
+·         db.vzlogs.aggregate( [ { $project : { exception_string: "$exception" }} , {$group:{_id: {exception_string:"$exception_string"} , total_exception_count : {$sum : 1} } } ]  )
+ 
+
+ "_id" : { "exception_string" : "java.lang.StackOverflowError"  }, "total_exception_count" : 1
+
+
+"_id" : {  "exception_string" : "java.lang.Exception: DeviceConfig: Device not found. Adding: samsung-Nexus S  },   "total_exception_count" : 1
+
+
+ "_id" : {  "exception_string" : "java.lang.Exception: DeviceConfig: Device not found. Adding: asus-Transforme },   "total_exception_count" : 1
+
+
+ "_id" : {  "exception_string" : "java.lang.Exception: BitmapManager: not enough memory" },   "total_exception_count" : 144
+ 
+=====================================
+
+Total Count of unique devices/app_versions/fingerprints per unique exception :
+
+ > Iterate the list of Unique Exceptions  and for each exception :
+
+ > fire the following commands (I have hardcoded the unique exception message for simplicity)
+
+(1) db.vzlogs.distinct('build.device', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length
+
+(2) db.vzlogs.distinct('build.fingerprint', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length
+
+(3) db.vzlogs.distinct('app_version_code', {exception: 'java.lang.Exception: BitmapManager: not enough memory'}).length  
+
+>>>> 
+
